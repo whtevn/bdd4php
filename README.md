@@ -1,6 +1,4 @@
 # bdd4php
-=======
-
 Assuming my project looks something like this:
 
     myProject/
