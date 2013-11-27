@@ -1,44 +1,56 @@
 <?php
 	include 'colors.php';
 	class Expectation {
-		public static $testValue;
 		private static $colors;
-		private static $asIntended=true;
 		public function __construct($val){
-			static::$testValue = $val;
+			$this->testValue = $val;
+			$this->asIntended = true;
 			static::$colors = new Colors();
 		}
 
-		public static function toBe($val){
-			static::judge($val == static::$testValue,
-				"expected ".print_r(static::$testValue, true)." but got ".print_r($val, true),
+		public function toBeTypeOf($val){
+			$this->judge($val == get_class($this->testValue),
+				"expected object to be of type $val but was ".get_class($this->testValue),
+				"did not expect object to be of type $val, but it was");
+		}
+
+		public function toBe($val){
+			$this->judge($val == $this->testValue,
+				"expected ".print_r($this->testValue, true)." but got ".print_r($val, true),
 				"did not expect ".print_r($val, true).", but got it");
 		}
 
-		public static function not(){
-			$expectation = new Expectation(static::$testValue);
-			$expectation->notAsIntended();
-			return $expectation;
+		public function toHaveProperty($value){
+			$this->judge(IsSet($this->testValue->{$value}),
+				"expected object to have property $value, but it did not",
+				"expected object not to have property $value, but it did");
 		}
 
-		private static function notAsIntended(){
-			static::$asIntended = false;
+		public function not(){
+			$this->notAsIntended();
+			return $this;
 		}
 
-		public static function judge($eval, $msg, $unmsg){
-			if(!static::$asIntended){
+		private function notAsIntended(){
+			$this->asIntended = false;
+		}
+
+		public function judge($eval, $msg, $unmsg){
+			if(!$this->asIntended){
 				$msg  = $unmsg;
 				$eval = !$eval;
 			}
 			$eval ? static::success() : static::failure($msg);
-			static::$asIntended = true;
+			$this->asIntended = true;
 		}
 
-		private static function success(){
+		private function success(){
+			$this->success = true;
 			print(static::$colors->getColoredString('.', 'green'));
 		}
 
-		private static function failure($msg){
+		private function failure($msg){
+			$this->success = false;
 			print static::$colors->getColoredString("\n$msg\n", 'red');
 			debug_print_backtrace();
 		}
