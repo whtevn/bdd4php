@@ -1,33 +1,4 @@
 # bdd4php
-Assuming my project looks something like this:
-
-    myProject/
-		  itemSet.php
-			
-Add a specification directory and clone bdd4php into it so that your
-project now looks like this:
-
-    myProject/
-     itemSet.php
-     spec/
-       bdd4php/
-         testSuite/
-         sampleSpec.php
-				   
-There are other directories under testSuite/, but for the purposes of
-using the project (and not developing it), they can safely be ignored.
-
-## sampleSpec.php
-
-While sampleSpec.php is not something you will use while developing,
-it is a helpful starting guide. 
-
-To see it at work, after cloning the project.
-
-	$ cd bdd4php/
-	$ php sampleSpec.php
-
-There are 3 passing tests and 2 failing tests by design
 
 ## Basic Syntax
 
@@ -45,7 +16,20 @@ a more detailed example.
 			expect($scene->foo)->toBe("bar");
 		})->
 
+## sampleSpec.php
+
+While sampleSpec.php is not something you will use while developing,
+it is a helpful starting guide. 
+
+To see it at work, after cloning the project.
+
+	$ cd bdd4php/
+	$ php sampleSpec.php
+
+There are 3 passing tests and 2 failing tests by design
 Parts are explained below:
+
+## Syntax explained
 
 **Scenario**: The scenario class kicks off a series of tests. All test segments
 are preceded by a call to Scenario::when($title, $scenarioFunction)
@@ -90,4 +74,24 @@ can be called from anywhere within the Scenario::when() function, but I have not
 Once the Scenario::when() context comes into play, everything except expect() returns 
 the same instance of Scenario that is passed in through when(). This means that the() can
 be called from beforeEach() or another the(), and the same is true for beforeEach().
+
+## Suggested Project Layout
+
+Assuming my project looks something like this:
+
+    myProject/
+		  itemSet.php
+			
+Add a specification directory and clone bdd4php into it so that your
+project now looks like this:
+
+    myProject/
+     itemSet.php
+     spec/
+       bdd4php/
+         testSuite/
+         sampleSpec.php
+				   
+There are other directories under testSuite/, but for the purposes of
+using the project (and not developing it), they can safely be ignored.
 
