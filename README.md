@@ -27,7 +27,6 @@ To see it at work, after cloning the project.
 	$ php sampleSpec.php
 
 There are 3 passing tests and 2 failing tests by design
-Parts are explained below:
 
 ## Syntax explained
 
@@ -82,15 +81,17 @@ Assuming my project looks something like this:
     myProject/
 		  itemSet.php
 			
-Add a specification directory and clone bdd4php into it so that your
-project now looks like this:
+Add a specification directory with a place for mocks, stubs, and fixtures. Then clone bdd4php
+into it so that your project now looks like this:
 
     myProject/
      itemSet.php
      spec/
+		   mocks/
+		   stubs/
+		   fixtures/
        bdd4php/
          testSuite/
-         sampleSpec.php
 				   
 There are other directories under testSuite/, but for the purposes of
 using the project (and not developing it), they can safely be ignored.
