@@ -5,9 +5,12 @@
 	final class Scenario {
 		private static $expectations=array();
 		public static function when($title, $func) {
-			$func(new Scenario(function(){}));
+			$scene = new Scenario(function(){}); 
+			$func($scene);
 			$report = Scenario::reportOn(static::$expectations);
-			echo("\n\nof ".sizeof(static::$expectations)." expected results, ".sizeof($report['success'])."  succeeded and ".sizeof($report['failure'])." failed\n\n");
+			echo("\n$title");
+			echo("\n\tof ".sizeof(static::$expectations)." expected results, ".sizeof($report['success'])."  succeeded and ".sizeof($report['failure'])." failed\n\n");
+			static::$expectations=array();
 		}
 
 		private static function reportOn($expectations){
@@ -22,10 +25,13 @@
 			return $report;
 		}
 
-		public function beforeEach($before){
-			$scene = new Scenario;
-			$scene->doBeforeEach = $before;
-			return $scene;
+		public function beforeEach($before, $opt=null){
+			if($opt){
+				$this->doBeforeEach[] = $opt;
+			}else{
+				$this->doBeforeEach[] = $before;
+			}
+			return $this;
 		}
 
 		public function the($title, $func){
@@ -34,8 +40,9 @@
 					return Scenario::runExpectation(new Expectation($val));
 				}
 			}
-			$dbe = $this->doBeforeEach;
-			$dbe($this);
+			foreach($this->doBeforeEach as $bfunc){
+				$bfunc($this);
+			}
 			$func($this);
 			return $this;
 		}
@@ -46,7 +53,8 @@
 		}
 
 		private function __constructor($before){
-			$this->addMethod('doBeforeEach', $before);
+			$this->doBeforeEach = array();
+			$this->doBeforeEach[] = $before;
 		}
 	}
 ?>
