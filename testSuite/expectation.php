@@ -1,11 +1,10 @@
 <?php
-	include 'colors.php';
 	class Expectation {
 		private static $colors;
 		public function __construct($val){
+			static::$colors = new Colors();
 			$this->testValue = $val;
 			$this->asIntended = true;
-			static::$colors = new Colors();
 		}
 
 		public function toBeTypeOf($val){
@@ -16,7 +15,7 @@
 
 		public function toBe($val){
 			$this->judge($val == $this->testValue,
-				"expected ".print_r($this->testValue, true)." but got ".print_r($val, true),
+				"expected ".print_r($val, true)." but got ".print_r($this->testValue, true),
 				"did not expect ".print_r($val, true).", but got it");
 		}
 
