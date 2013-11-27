@@ -10,11 +10,11 @@ Add a specification directory and clone bdd4php into it so that your
 project now looks like this:
 
     myProject/
-		  itemSet.php
-			spec/
-			  bdd4php/
-				 testSuite/
-				 sampleSpec.php
+     itemSet.php
+     spec/
+       bdd4php/
+         testSuite/
+         sampleSpec.php
 				   
 There are other directories under testSuite/, but for the purposes of
 using the project (and not developing it), they can safely be ignored.
@@ -29,6 +29,22 @@ after cloning the project.
 There are 3 passing tests and 2 failing tests by design
 
 ## Basic Syntax
+
+Looks like this. Look at sampleSpec.php file included in the project for
+a more detailed example.
+
+	Scenario::when("name the scenario here", function($then){
+		$then->beforeEach("set up the initial conditions", function($scene){
+			$scene->foo  = "bar"
+		})->
+		the("first name of first user should be correct", function($scene){
+			expect($scene->foo)->toBe("bar");
+		})->
+		the("first name of first user should be correct", function($scene){
+			expect($scene->foo)->toBe("bar");
+		})->
+
+Parts are explained below:
 
 **Scenario**: The scenario class kicks off a series of tests. All test segments
 are preceded by a call to Scenario::when($title, $scenarioFunction)
@@ -73,17 +89,4 @@ can be called from anywhere within the Scenario::when() function, but I have not
 Once the Scenario::when() context comes into play, everything except expect() returns 
 the same instance of Scenario that is passed in through when(). This means that the() can
 be called from beforeEach() or another the(), and the same is true for beforeEach().
-
-So, putting that all together, it looks like this:
-
-	Scenario::when("name the scenario here", function($then){
-		$then->beforeEach("set up the initial conditions", function($scene){
-			$scene->foo  = "bar"
-		})->
-		the("first name of first user should be correct", function($scene){
-			expect($scene->foo)->toBe("bar");
-		})->
-		the("first name of first user should be correct", function($scene){
-			expect($scene->foo)->toBe("bar");
-		})->
 
