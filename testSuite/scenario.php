@@ -13,7 +13,7 @@
 			return $scene;
 		}
 
-		public function it($title, $func){
+		public function the($title, $func){
 			if(!is_callable('expect')){
 				function expect($val){
 					return new Expectation($val);
