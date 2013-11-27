@@ -34,6 +34,7 @@
 				$eval = !$eval;
 			}
 			$eval ? static::success() : static::failure($msg);
+			static::$asIntended = true;
 		}
 
 		private static function success(){
