@@ -1,13 +1,23 @@
 <?php
 	include 'fixture.php';	
+	include 'colors.php';
 	include 'expectation.php';	
 
 	final class Scenario {
 		private static $expectations=array();
+		private static $colors;
 		public static function when($title, $func) {
-			$func(new Scenario(function(){}));
+			static::$colors =  new Colors();
+			$scene = new Scenario(function(){}); 
+			$func($scene);
 			$report = Scenario::reportOn(static::$expectations);
-			echo("\n\nof ".sizeof(static::$expectations)." expected results, ".sizeof($report['success'])."  succeeded and ".sizeof($report['failure'])." failed\n\n");
+			echo("\n$title");
+			$msg = "\n\tof ".sizeof(static::$expectations)." expected results, ".sizeof($report['success'])."  succeeded and ".sizeof($report['failure'])." failed\n\n";
+
+			$c = sizeof($report['failure'])>0 ? 'red' : 'green';
+			print(static::$colors->getColoredString($msg, $c));
+
+			static::$expectations=array();
 		}
 
 		private static function reportOn($expectations){
@@ -22,10 +32,13 @@
 			return $report;
 		}
 
-		public function beforeEach($before){
-			$scene = new Scenario;
-			$scene->doBeforeEach = $before;
-			return $scene;
+		public function beforeEach($before, $opt=null){
+			if($opt){
+				$this->doBeforeEach[] = $opt;
+			}else{
+				$this->doBeforeEach[] = $before;
+			}
+			return $this;
 		}
 
 		public function the($title, $func){
@@ -34,8 +47,9 @@
 					return Scenario::runExpectation(new Expectation($val));
 				}
 			}
-			$dbe = $this->doBeforeEach;
-			$dbe($this);
+			foreach($this->doBeforeEach as $bfunc){
+				$bfunc($this);
+			}
 			$func($this);
 			return $this;
 		}
@@ -46,7 +60,8 @@
 		}
 
 		private function __constructor($before){
-			$this->addMethod('doBeforeEach', $before);
+			$this->doBeforeEach = array();
+			$this->doBeforeEach[] = $before;
 		}
 	}
 ?>

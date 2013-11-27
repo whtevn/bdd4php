@@ -1,17 +1,28 @@
 <?php
-	include 'colors.php';
 	class Expectation {
 		private static $colors;
 		public function __construct($val){
+			static::$colors = new Colors();
 			$this->testValue = $val;
 			$this->asIntended = true;
-			static::$colors = new Colors();
+		}
+
+		public function toBeTypeOf($val){
+			$this->judge($val == get_class($this->testValue),
+				"expected object to be of type $val but was ".get_class($this->testValue),
+				"did not expect object to be of type $val, but it was");
 		}
 
 		public function toBe($val){
 			$this->judge($val == $this->testValue,
-				"expected ".print_r($this->testValue, true)." but got ".print_r($val, true),
+				"expected ".print_r($val, true)." but got ".print_r($this->testValue, true),
 				"did not expect ".print_r($val, true).", but got it");
+		}
+
+		public function toHaveProperty($value){
+			$this->judge(IsSet($this->testValue->{$value}),
+				"expected object to have property $value, but it did not",
+				"expected object not to have property $value, but it did");
 		}
 
 		public function not(){
