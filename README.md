@@ -87,9 +87,9 @@ into it so that your project now looks like this:
     myProject/
      itemSet.php
      spec/
-		   mocks/
-		   stubs/
-		   fixtures/
+       mocks/
+       stubs/
+       fixtures/
        bdd4php/
          testSuite/
 				   
