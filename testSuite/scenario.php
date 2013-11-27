@@ -1,15 +1,22 @@
 <?php
 	include 'fixture.php';	
+	include 'colors.php';
 	include 'expectation.php';	
 
 	final class Scenario {
 		private static $expectations=array();
+		private static $colors;
 		public static function when($title, $func) {
+			static::$colors =  new Colors();
 			$scene = new Scenario(function(){}); 
 			$func($scene);
 			$report = Scenario::reportOn(static::$expectations);
 			echo("\n$title");
-			echo("\n\tof ".sizeof(static::$expectations)." expected results, ".sizeof($report['success'])."  succeeded and ".sizeof($report['failure'])." failed\n\n");
+			$msg = "\n\tof ".sizeof(static::$expectations)." expected results, ".sizeof($report['success'])."  succeeded and ".sizeof($report['failure'])." failed\n\n";
+
+			$c = sizeof($report['failure'])>0 ? 'red' : 'green';
+			print(static::$colors->getColoredString($msg, $c));
+
 			static::$expectations=array();
 		}
 
