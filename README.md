@@ -19,9 +19,12 @@ project now looks like this:
 There are other directories under testSuite/, but for the purposes of
 using the project (and not developing it), they can safely be ignored.
 
-On the other hand, while sampleSpec.php is not something you will use 
-while developing, it is a helpful starting guide. To see it at work,
-after cloning the project.
+## sampleSpec.php
+
+While sampleSpec.php is not something you will use while developing,
+it is a helpful starting guide. 
+
+To see it at work, after cloning the project.
 
 	$ cd bdd4php/
 	$ php sampleSpec.php
