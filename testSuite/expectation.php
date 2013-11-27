@@ -10,13 +10,9 @@
 		}
 
 		public static function toBe($val){
-			if(static::$asIntended){
-				$notToBe = '';
-			}else{
-				$notToBe = "not to be ";
-			}
 			static::judge($val == static::$testValue,
-			 	"expected $notToBe".static::$testValue." but got $val");
+				"expected ".print_r(static::$testValue, true)." but got ".print_r($val, true),
+				"did not expect ".print_r($val, true).", but got it");
 		}
 
 		public static function not(){
@@ -29,8 +25,9 @@
 			static::$asIntended = false;
 		}
 
-		public static function judge($eval, $msg){
+		public static function judge($eval, $msg, $unmsg){
 			if(!static::$asIntended){
+				$msg  = $unmsg;
 				$eval = !$eval;
 			}
 			$eval ? static::success() : static::failure($msg);
