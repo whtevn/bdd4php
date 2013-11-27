@@ -55,6 +55,13 @@ beforeEach() can be called a second time, and the function given will be run
 after the previously given beforeEach(). To stop chaining beforeEach() calls,
 end the Scenario.
 
+**afterEach**: functions that run after each the() block. Mirros beforeEach in 
+every way. 
+
+    $then->afterEach("tear down the initial conditions", function($scene){
+			...
+		})
+
 **the**: sets up further conditions for particular tests, and provides context for
 the expect() command. 
 
