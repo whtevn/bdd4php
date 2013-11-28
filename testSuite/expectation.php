@@ -45,13 +45,15 @@
 
 		private function success(){
 			$this->success = true;
-			print(static::$colors->getColoredString('.', 'green'));
+			//print(static::$colors->getColoredString('.', 'green'));
 		}
 
 		private function failure($msg){
 			$this->success = false;
-			print static::$colors->getColoredString("\n$msg\n", 'red');
-			debug_print_backtrace();
+			$this->msg=$msg;
+			$this->backtrace=debug_backtrace();
+			/*print static::$colors->getColoredString("\n$msg\n", 'red');
+			debug_print_backtrace();*/
 		}
 	}
 ?>

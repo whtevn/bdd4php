@@ -2,6 +2,7 @@
 	include 'fixture.php';	
 	include 'colors.php';
 	include 'expectation.php';	
+	include 'reporter.php';	
 
 	final class Scenario {
 		private static $expectations=array();
@@ -14,7 +15,7 @@
 			$func($scene);
 
 			$report = Scenario::reportOn(static::$expectations);
-			Scenario::printReport($title, $report, $expectations);
+			Reporter::summary($title, $report, static::$expectations);
 
 			static::resetExpectations();
 		}
@@ -23,13 +24,6 @@
 			static::$expectations=array();
 		}
 
-		public static function printReport($title, $report, $expectations){
-			echo("\n$title");
-			$msg = "\n\tof ".sizeof(static::$expectations)." expected results, ".sizeof($report['success'])."  succeeded and ".sizeof($report['failure'])." failed\n\n";
-
-			$c = sizeof($report['failure'])>0 ? 'red' : 'green';
-			print(static::$colors->getColoredString($msg, $c));
-		}
 
 		private static function reportOn($expectations){
 			$report = array('success'=>array(), 'failure'=>array());
