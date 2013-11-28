@@ -33,9 +33,13 @@
 								echo("\tIn Scenario \"".$bt['args'][0]."\"\n");
 							}else if($bt['function']=='the'){
 								echo("\tWhile testing \"".$bt['args'][0]."\"\n");
+								var_dump($bt);
 							}else if($bt['function']=='beforeEach'){
 								echo("\tUnder conditions \"".$bt['args'][0]."\"\n");
 							}
+							break;
+						default:
+							// stack traces that did not come from the testSuite
 							break;
 					}
 				}
