@@ -2,6 +2,7 @@
 	include 'testSuite/scenario.php';
 
 
+
 	Fixture::at('fixtures');
 	Scenario::when("testing some basic things", function($then){
 		$then->beforeEach("set up the users", function($scene){
@@ -19,10 +20,10 @@
 			expect($users->hulk->last_name)->not()->toBe("zappa");
 		})->
 		the("errors should fail loudly", function($users){
-			barz;
 			expect($users->hulk->last_name)->not()->toBe("hogan");
 			expect($users->hulk->last_name)->toBe("zappa");
 		});
 	});
+
 
 ?>
