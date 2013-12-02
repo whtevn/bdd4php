@@ -4,21 +4,26 @@
 		public static function summary($title, $report, $expectations){
 			static::$colors =  new Colors();
 
+			$failures = array();
 			foreach($expectations as $exp){
 				if($exp->success){
 					print(static::$colors->getColoredString('.', 'green'));
 				}else{
+					print(static::$colors->getColoredString('F', 'red'));
 					$msg = $exp->msg;
-					print static::$colors->getColoredString("\n$msg\n", 'red');
-					static::printBacktrace($exp->backtrace);
+					$failures[] = $exp; 
 				}
 			}
+
 
 			echo("\n$title");
 			$msg = "\n\tof ".sizeof($expectations)." expected results, ".sizeof($report['success'])."  succeeded and ".sizeof($report['failure'])." failed\n\n";
 
 			$c = sizeof($report['failure'])>0 ? 'red' : 'green';
 			print(static::$colors->getColoredString($msg, $c));
+			foreach($failures as $exp){
+				static::printBacktrace($exp->backtrace);
+			}
 		}
 
 		public static function printBacktrace($bts){
