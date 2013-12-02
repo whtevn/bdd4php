@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset='utf-8'>
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <link href='https://fonts.googleapis.com/css?family=Chivo:900' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" type="text/css" href="stylesheets/stylesheet.css" media="screen" />
+    <link rel="stylesheet" type="text/css" href="stylesheets/pygment_trac.css" media="screen" />
+    <link rel="stylesheet" type="text/css" href="stylesheets/print.css" media="print" />
+    <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <title>Bdd4php by whtevn</title>
+  </head>
+
+  <body>
+    <div id="container">
+      <div class="inner">
+
+        <header>
+          <h1>Bdd4php</h1>
+          <h2>so simple it's incomplete</h2>
+        </header>
+
+        <section id="downloads" class="clearfix">
+          <a href="https://github.com/whtevn/bdd4php/zipball/master" id="download-zip" class="button"><span>Download .zip</span></a>
+          <a href="https://github.com/whtevn/bdd4php/tarball/master" id="download-tar-gz" class="button"><span>Download .tar.gz</span></a>
+          <a href="https://github.com/whtevn/bdd4php" id="view-on-github" class="button"><span>View on GitHub</span></a>
+        </section>
+
+        <hr>
+
+        <section id="main_content">
+          <h1>
+<a name="bdd4php" class="anchor" href="#bdd4php"><span class="octicon octicon-link"></span></a>bdd4php</h1>
+
+<p>simple bdd proof of concept for php</p>
+
+<h2>
+<a name="basic-syntax" class="anchor" href="#basic-syntax"><span class="octicon octicon-link"></span></a>Basic Syntax</h2>
+
+<p>Looks like this. Look at sampleSpec.php file included in the project for
+a more detailed example.</p>
+
+<pre><code>Scenario::when("name the scenario here", function($then){
+    $then-&gt;beforeEach("set up the initial conditions", function($scene){
+        $scene-&gt;foo  = "bar"
+    })-&gt;
+    the("first name of first user should be correct", function($scene){
+        expect($scene-&gt;foo)-&gt;toBe("bar");
+    })-&gt;
+    the("first name of first user should be correct", function($scene){
+        expect($scene-&gt;foo)-&gt;toBe("bar");
+    })-&gt;
+</code></pre>
+
+<h2>
+<a name="samplespecphp" class="anchor" href="#samplespecphp"><span class="octicon octicon-link"></span></a>sampleSpec.php</h2>
+
+<p>While sampleSpec.php is not something you will use while developing,
+it is a helpful starting guide. </p>
+
+<p>To see it at work, after cloning the project.</p>
+
+<pre><code>$ cd bdd4php/
+$ php sampleSpec.php
+</code></pre>
+
+<p>There are 3 passing tests and 2 failing tests by design</p>
+
+<h2>
+<a name="syntax-explained" class="anchor" href="#syntax-explained"><span class="octicon octicon-link"></span></a>Syntax explained</h2>
+
+<p><strong>Scenario</strong>: The scenario class kicks off a series of tests. All test segments
+are preceded by a call to Scenario::when($title, $scenarioFunction)</p>
+
+<pre><code>  Scenario::when("name the scenario here", function($then){
+    ...
+    })
+</code></pre>
+
+<p><strong>beforeEach</strong>: sets up the conditions for the tests that will follow within
+this scenario. Called as a instance method on the scenario instance passed in
+through the Scenario::when call. beforeEach is run before each call to 'the()'</p>
+
+<pre><code>    $then-&gt;beforeEach("set up the initial conditions", function($scene){
+        ...
+    })
+
+// or...
+
+    $then-&gt;beforeEach(function($scene){
+        ...
+    })
+</code></pre>
+
+<p>beforeEach() can be called a second time, and the function given will be run
+after the previously given beforeEach(). To stop chaining beforeEach() calls,
+end the Scenario.</p>
+
+<p><strong>afterEach</strong>: functions that run after each the() block. Mirros beforeEach in 
+every way. </p>
+
+<pre><code>$then-&gt;afterEach("tear down the initial conditions", function($scene){
+        ...
+    })
+</code></pre>
+
+<p><strong>the</strong>: sets up further conditions for particular tests, and provides context for
+the expect() command. </p>
+
+<pre><code>    the("first name of first user should be correct", function($scene){
+        ...
+    })-&gt;
+</code></pre>
+
+<p><strong>expect</strong>: Expects are called from inside the() blocks, although I suspect that expect()
+can be called from anywhere within the Scenario::when() function, but I have not tried it.</p>
+
+<pre><code>expect("bar")-&gt;toBe("bar");
+expect("bar")-&gt;not()-&gt;toBe("baz");
+expect("bar")-&gt;toBeTypeOf("String");
+expect("bar")-&gt;not()-&gt;toBeTypeOf("String");
+</code></pre>
+
+<p>Once the Scenario::when() context comes into play, everything except expect() returns 
+the same instance of Scenario that is passed in through when(). This means that the() can
+be called from beforeEach() or another the(), and the same is true for beforeEach().</p>
+
+<h2>
+<a name="suggested-project-layout" class="anchor" href="#suggested-project-layout"><span class="octicon octicon-link"></span></a>Suggested Project Layout</h2>
+
+<p>Assuming my project looks something like this:</p>
+
+<pre><code>myProject/
+      itemSet.php
+</code></pre>
+
+<p>Add a specification directory with a place for mocks, stubs, and fixtures. Then clone bdd4php
+into it so that your project now looks like this:</p>
+
+<pre><code>myProject/
+ itemSet.php
+ spec/
+   mocks/
+   stubs/
+   fixtures/
+   bdd4php/
+     testSuite/
+</code></pre>
+
+<p>There are other directories under testSuite/, but for the purposes of
+using the project (and not developing it), they can safely be ignored.</p>
+        </section>
+
+        <footer>
+          Bdd4php is maintained by <a href="https://github.com/whtevn">whtevn</a><br>
+          This page was generated by <a href="http://pages.github.com">GitHub Pages</a>. Tactile theme by <a href="https://twitter.com/jasonlong">Jason Long</a>.
+        </footer>
+
+        
+      </div>
+    </div>
+  </body>
+</html>
