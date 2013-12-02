@@ -22,7 +22,9 @@
 			$c = sizeof($report['failure'])>0 ? 'red' : 'green';
 			print(static::$colors->getColoredString($msg, $c));
 			foreach($failures as $exp){
+				print(static::$colors->getColoredString($exp->msg, 'red')."\n");
 				static::printBacktrace($exp->backtrace);
+				print("\n");
 			}
 		}
 
