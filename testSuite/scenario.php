@@ -8,16 +8,27 @@
 		private static $colors;
 		public static function when($title, $func) {
 			static::$colors =  new Colors();
-			$scene = new Scenario(function(){}); 
+			$scene = new Scenario(); 
+			$scene->doBeforeEach = array();
+			$scene->doAfterEach = array();
 			$func($scene);
+
 			$report = Scenario::reportOn(static::$expectations);
+			Scenario::printReport($title, $report, $expectations);
+
+			static::resetExpectations();
+		}
+
+		private static function resetExpectations(){
+			static::$expectations=array();
+		}
+
+		public static function printReport($title, $report, $expectations){
 			echo("\n$title");
 			$msg = "\n\tof ".sizeof(static::$expectations)." expected results, ".sizeof($report['success'])."  succeeded and ".sizeof($report['failure'])." failed\n\n";
 
 			$c = sizeof($report['failure'])>0 ? 'red' : 'green';
 			print(static::$colors->getColoredString($msg, $c));
-
-			static::$expectations=array();
 		}
 
 		private static function reportOn($expectations){
@@ -40,6 +51,14 @@
 			}
 			return $this;
 		}
+		public function afterEach($after, $opt=null){
+			if($opt){
+				$this->doAfterEach[] = $opt;
+			}else{
+				$this->doAfterEach[] = $after;
+			}
+			return $this;
+		}
 
 		public function the($title, $func){
 			if(!is_callable('expect')){
@@ -51,6 +70,9 @@
 				$bfunc($this);
 			}
 			$func($this);
+			foreach($this->doAfterEach as $bfunc){
+				$bfunc($this);
+			}
 			return $this;
 		}
 
@@ -59,9 +81,5 @@
 			return $exp;
 		}
 
-		private function __constructor($before){
-			$this->doBeforeEach = array();
-			$this->doBeforeEach[] = $before;
-		}
 	}
 ?>
