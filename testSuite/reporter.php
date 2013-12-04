@@ -4,21 +4,34 @@
 		public static function summary($title, $report, $expectations){
 			static::$colors =  new Colors();
 
+			$failures = array();
 			foreach($expectations as $exp){
-				if($exp->success){
+				if(!$exp->pending && $exp->success){
 					print(static::$colors->getColoredString('.', 'green'));
-				}else{
+				}else if(!$exp->pending){
+					print(static::$colors->getColoredString('F', 'red'));
 					$msg = $exp->msg;
-					print static::$colors->getColoredString("\n$msg\n", 'red');
-					static::printBacktrace($exp->backtrace);
+					$failures[] = $exp; 
 				}
 			}
 
+
 			echo("\n$title");
-			$msg = "\n\tof ".sizeof($expectations)." expected results, ".sizeof($report['success'])."  succeeded and ".sizeof($report['failure'])." failed\n\n";
+			$totalRan = sizeof($report['success'])+sizeof($report['failure']);
+			$msg = "\n\tof ".$totalRan." expected results, ".sizeof($report['success'])."  succeeded and ".sizeof($report['failure'])." failed\n";
 
 			$c = sizeof($report['failure'])>0 ? 'red' : 'green';
 			print(static::$colors->getColoredString($msg, $c));
+			if(IsSet($report['pending']) && sizeof($report['pending']) > 0){
+				$msg = "\t".sizeof($report['pending'])." pending expectations were not run\n";
+				print(static::$colors->getColoredString($msg, 'yellow'));
+			}
+print("\n");
+			foreach($failures as $exp){
+				print(static::$colors->getColoredString($exp->msg, 'red')."\n");
+				static::printBacktrace($exp->backtrace);
+				print("\n");
+			}
 		}
 
 		public static function printBacktrace($bts){

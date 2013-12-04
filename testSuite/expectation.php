@@ -1,10 +1,11 @@
 <?php
 	class Expectation {
 		private static $colors;
-		public function __construct($val){
+		public function __construct($val, $pending=false){
 			static::$colors = new Colors();
 			$this->testValue = $val;
 			$this->asIntended = true;
+			$this->pending = $pending;
 		}
 
 		public function toBeTypeOf($val){
@@ -39,21 +40,17 @@
 				$msg  = $unmsg;
 				$eval = !$eval;
 			}
-			$eval ? static::success() : static::failure($msg);
+			
+			if(!$this->pending){
+				if($eval){
+					$this->success = true;
+				}else{
+					$this->success = false;
+					$this->msg=$msg;
+					$this->backtrace=debug_backtrace();
+				}
+			}
 			$this->asIntended = true;
-		}
-
-		private function success(){
-			$this->success = true;
-			//print(static::$colors->getColoredString('.', 'green'));
-		}
-
-		private function failure($msg){
-			$this->success = false;
-			$this->msg=$msg;
-			$this->backtrace=debug_backtrace();
-			/*print static::$colors->getColoredString("\n$msg\n", 'red');
-			debug_print_backtrace();*/
 		}
 	}
 ?>
