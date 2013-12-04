@@ -20,6 +20,13 @@
 				"did not expect ".print_r($val, true).", but got it");
 		}
 
+		public function toBeTimestamp($val){
+			$val = strtotime($val);
+			$this->judge($val == $this->testValue,
+				"expected ".strftime("%m/%d/%Y %l:%M:%S %p", $val)." but got ".strftime("%m/%d/%Y %l:%M:%S %p", $this->testValue),
+				"did not expect ".strftime("%m/%d/%Y %l:%M:%S %p", $val).", but got it");
+		}
+
 		public function toHaveProperty($value){
 			$this->judge(IsSet($this->testValue->{$value}),
 				"expected object to have property $value, but it did not",
