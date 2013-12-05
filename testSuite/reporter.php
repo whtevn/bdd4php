@@ -17,7 +17,7 @@
 			}
 
 
-			echo("\n$title");
+			echo(static::$colors->getColoredString("\n$title", 'cyan'));("");
 
 			if(IsSet($report['pending']) && sizeof($report['pending']) > 0){
 				$msg = "\t".sizeof($report['pending'])." pending expectations were not run\n";
