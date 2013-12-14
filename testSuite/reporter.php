@@ -1,6 +1,10 @@
 <?php
 	class Reporter {
 		private static $colors;
+		public static function Summarize($scene){
+			var_dump($scene);
+		}
+
 		public static function summary($title, $report, $expectations){
 			static::$colors =  new Colors();
 
