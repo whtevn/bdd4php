@@ -31,7 +31,6 @@
 		}
 
 		public function the($title, $func, $dontdoit=false){
-			
 			return $this->expectationSet[] = ExpectationSet::Run($this, $title, $func, $dontdoit);
 		}
 
