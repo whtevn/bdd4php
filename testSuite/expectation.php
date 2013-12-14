@@ -54,16 +54,12 @@
 				$eval = !$eval;
 			}
 			
-			if(!$this->pending){
-				if($eval){
-					$this->success = true;
-				}else{
-					$this->success = false;
-					$this->msg=$msg;
-					$this->backtrace=debug_backtrace();
-				}
+			$this->success = $eval;
+			if($this->success){
+				$msg = "success";
 			}
-			$this->asIntended = true;
+			$this->msg=$msg;
+			$this->backtrace=debug_backtrace();
 		}
 	}
 ?>

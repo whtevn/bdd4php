@@ -24,15 +24,17 @@ class ExpectationSet {
 	public static function Run($scene, $title, $func, $ignore=false){
 		$es = new ExpectationSet($title, $scene);
 		static::$sets[] = $es;
-		foreach($es->before as $id => $bfunc){
+		foreach($es->before as $id => $b){
 			set_error_handler($es->generateErrorHandler('before', $id));
+			$bfunc = $b->func;
 			$bfunc($es->scene);
 		}
 		set_error_handler($es->generateErrorHandler('during', $es->id));
 		$func($es->scene);
-		foreach($es->after as $bfunc){
+		foreach($es->after as $id=>$a){
 			set_error_handler($es->generateErrorHandler('after', $id));
-			$bfunc($es->scene);
+			$afunc = $a->func;
+			$afunc($es->scene);
 		}
 		return $es;
 	}

@@ -3,84 +3,67 @@
 		private static $colors;
 		private static $counters=array();
 		public static function Summarize($scene){
-			echo("\n".$scene->title);
+			$record  = array();
+			$colors =  new Colors();
+			echo($colors->getColoredString("\n".$scene->title, 'cyan'));
 			foreach($scene->expectationSet as $es){
-				if(static::sizeIncreased('beforeSetSize', $es->errorSet['before'])){
-					echo("\n\t### new before");
+				if(static::sizeIncreased('beforeSetSize', $es->before)){
+					echo($colors->getColoredString("\n\t".end($es->before)->title, 'cyan'));
 				}
-				echo("\n\t".$es->title."\n");
+				if(IsSet($es->errorSet['before']) && static::sizeIncreased('beforeErrorSetSize', $es->errorSet['before'])){
+					$err = end($es->errorSet['before']);
+					echo($colors->getColoredString("\n\t".$err['errorString']." during beforeEach\n\ton line ".$err['errorLine']." of ".$err['errorFile'], 'yellow'));
+				}
+				$success = true;
+				$errors = array();
 				foreach($es->expectations as $e){
-					echo($e->success ? '.' : 'F');
+					$record[] = $e;
+					if(!$e->success){
+						$errors[] = $e->msg." \n\t\t\t\t(expectation on ".static::printBacktrace($e->backtrace).")";
+					}
+					if($success){
+						$success = $e->success;
+					}
 				}
+				echo($colors->getColoredString("\n\t\t".$es->title, ($e->success ? 'green' : 'red')));
+				if(sizeOf($errors)>0){
+					foreach($errors as $err){
+						echo($colors->getColoredString("\n\t\t\t".$err, 'red'));
+					}
+				}
+				if(isSet($es->errorSet['during'][$es->id])){
+					$duringError = $es->errorSet['during'][$es->id];
+					echo($colors->getColoredString("\n\t".$duringError['errorString']." during an expectation set\n\ton line ".$duringError['errorLine']." of ".$duringError['errorFile'], 'yellow'));
+				}
+			}
+
+			echo($colors->getColoredString("\n\nTL;DR: ", 'cyan'));
+			foreach($record as $r){
+				echo($r->success ? $colors->getColoredString('.', 'green') : $colors->getColoredString('F', 'red'));
 			}
 		}
 
 		private static function sizeIncreased($name, $thing){
-			$oldSize = static::$counters[$name] || 0; 
+			$oldSize = 0; 
+			if(IsSet(static::$counters[$name])){
+				$oldSize = static::$counters[$name]; 
+			}
 			static::$counters[$name] = sizeof($thing);
 			return sizeof($thing) > $oldSize;
 		}
 
-		public static function summary($title, $report, $expectations){
-			static::$colors =  new Colors();
-
-			$resultString = '';
-			$failures = array();
-			foreach($expectations as $exp){
-				if(!$exp->pending && $exp->success){
-					$resultString .= static::$colors->getColoredString('.', 'green');
-				}else if(!$exp->pending){
-					$resultString .= static::$colors->getColoredString('F', 'red');
-					$msg = $exp->msg;
-					$failures[] = $exp; 
-				}
-			}
-
-
-			echo(static::$colors->getColoredString("\n$title", 'cyan'));("");
-
-			if(IsSet($report['pending']) && sizeof($report['pending']) > 0){
-				$msg = "\t".sizeof($report['pending'])." pending expectations were not run\n";
-				print(static::$colors->getColoredString($msg, 'yellow'));
-			}
-print("\n");
-			foreach($failures as $exp){
-				print(static::$colors->getColoredString($exp->msg, 'red')."\n");
-				static::printBacktrace($exp->backtrace);
-				print("\n");
-			}
-
-			$totalRan = sizeof($report['success'])+sizeof($report['failure']);
-			$msg = "\nof ".$totalRan." expected results, ".sizeof($report['success'])."  succeeded and ".sizeof($report['failure'])." failed\n";
-
-			$c = sizeof($report['failure'])>0 ? 'red' : 'green';
-			print(static::$colors->getColoredString($msg, $c));
-
-			print("\n".$resultString."\n");
-		}
-
 		public static function printBacktrace($bts){
+			$result = '';
 			foreach($bts as $bt){
 				if(!preg_match('/\/testSuite/', $bt['file'])){
 					switch($bt['class']){
 						case 'Expectation':
-							echo("\tExpectation failed on line ".$bt['line']." of ".$bt['file']."\n");
-							break;
-						case 'Scenario':
-							if($bt['function']=='when'){
-								echo("\tIn Scenario \"".$bt['args'][0]."\"\n");
-							}else if($bt['function']=='the'){
-								echo("\tWhile testing \"".$bt['args'][0]."\"\n");
-							}else if($bt['function']=='beforeEach'){
-								echo("\tUnder conditions \"".$bt['args'][0]."\"\n");
-							}
-							break;
-						default:
-							// stack traces that did not come from the testSuite
+							$result .= "on line ".$bt['line']." of ".$bt['file'];
 							break;
 					}
 				}
 			}
+			return $result;
 		}
 	}
 ?>

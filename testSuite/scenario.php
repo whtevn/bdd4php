@@ -3,6 +3,7 @@
 	include 'colors.php';
 	include 'expectationSet.php';	
 	include 'reporter.php';	
+	include 'namedBlock.php';	
 
 	final class Scenario {
 		public static function when($title, $func) {
@@ -16,20 +17,12 @@
 		}
 
 		public function beforeEach($before, $opt=null){
-			if($opt){
-				$this->doBeforeEach[] = $opt;
-			}else{
-				$this->doBeforeEach[] = $before;
-			}
+			$this->doBeforeEach[] =new NamedBlock($before, $opt);
 			return $this;
 		}
 
 		public function afterEach($after, $opt=null){
-			if($opt){
-				$this->doAfterEach[] = $opt;
-			}else{
-				$this->doAfterEach[] = $after;
-			}
+			$this->doBeforeEach[] = new NamedBlock($after, $opt);
 			return $this;
 		}
 
