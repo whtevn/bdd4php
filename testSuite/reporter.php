@@ -1,6 +1,17 @@
 <?php
 	class Reporter {
 		private static $colors;
+		public static function Summarize($scene){
+			var_dump($scene);
+			echo("\n".$scene->title);
+			foreach($scene->expectationSet as $es){
+				echo("\n\t".$es->title."\n");
+				foreach($es->expectations as $e){
+					echo($e->success ? '.' : 'F');
+				}
+			}
+		}
+
 		public static function summary($title, $report, $expectations){
 			static::$colors =  new Colors();
 
