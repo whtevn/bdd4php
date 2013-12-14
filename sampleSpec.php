@@ -1,9 +1,4 @@
 <?php
-	include 'testSuite/scenario.php';
-
-
-
-	Fixture::at('fixtures');
 	Scenario::when("testing some basic things", function($then){
 		$then->beforeEach("set up the users", function($scene){
 			$userFixture  = Fixture::get('users');

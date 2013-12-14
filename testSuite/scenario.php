@@ -6,14 +6,15 @@
 	include 'namedBlock.php';	
 
 	final class Scenario {
+		public static $scenarios = array();
 		public static function when($title, $func) {
 			$scene = new Scenario(); 
 			$scene->doBeforeEach = array();
 			$scene->doAfterEach = array();
 			$scene->expectationSet = array();
 			$scene->title = $title;
-			$func($scene);
-			Reporter::Summarize($scene);
+			$scene->runner = new NamedBlock($title, $func);
+			static::$scenarios[] = $scene;
 		}
 
 		public function beforeEach($before, $opt=null){
@@ -32,6 +33,14 @@
 
 		public function the($title, $func, $pending=false){
 			return $this->expectationSet[] = ExpectationSet::Run($this, $title, $func, $pending);
+		}
+
+		public static function RunAll(){
+			foreach(static::$scenarios as $scene){
+				$sceneFunc = $scene->runner->func;
+				$sceneFunc($scene);
+				Reporter::Summarize($scene);
+			}
 		}
 	}
 ?>

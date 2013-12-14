@@ -75,7 +75,7 @@
 		public static function printBacktrace($bts){
 			$result = '';
 			foreach($bts as $bt){
-				if(!preg_match('/\/testSuite/', $bt['file']) && $bt['class']=='Expectation'){
+				if(!preg_match('/\/testSuite/', $bt['file']) && IsSet($bt['class']) && $bt['class']=='Expectation'){
 					$result .= "on line ".$bt['line']." of ".$bt['file'];
 				}
 			}
