@@ -37,11 +37,21 @@
 				}
 			}
 
-			echo($colors->getColoredString("\n\nTL;DR: ", 'cyan'));
+			$successes = $failures = 0;
+			$result = "\n\n";
 			foreach($record as $r){
-				echo($r->success ? $colors->getColoredString('.', 'green') : $colors->getColoredString('F', 'red'));
+				if($r->success){
+					$result .= $colors->getColoredString('.', 'green');
+					$successes++;
+				}else{
+				  $result .= $colors->getColoredString('F', 'red');
+					$failures++;
+				}
 			}
-			echo("\n");
+			$sumColor = $failures>0 ? 'red' : 'green';
+			echo($colors->getColoredString("\n\nTL;DR: ", 'cyan'));
+			echo($colors->getColoredString("\n$successes succeeded and $failures failed", $sumColor));
+			echo("$result\n\n");
 		}
 
 		private static function sizeIncreased($name, $thing){
