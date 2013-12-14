@@ -19,7 +19,7 @@
 				foreach($es->expectations as $e){
 					$record[] = $e;
 					if(!$e->success){
-						$errors[] = $e->msg." \n\t\t\t\t(expectation on ".static::printBacktrace($e->backtrace).")";
+						$errors[] = $e->msg." \n\t\t\t\t(expectation ".static::printBacktrace($e->backtrace).")";
 					}
 					if($success){
 						$success = $e->success;
@@ -50,6 +50,7 @@
 			}
 			$sumColor = $failures>0 ? 'red' : 'green';
 			echo($colors->getColoredString("\n\nTL;DR: ", 'cyan'));
+			echo(sizeof($record)." exceptions ran");
 			echo($colors->getColoredString("\n$successes succeeded and $failures failed", $sumColor));
 			echo("$result\n\n");
 		}
