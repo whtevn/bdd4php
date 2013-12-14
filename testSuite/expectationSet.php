@@ -2,7 +2,7 @@
 	include 'expectation.php';	
 
 	function xexpect($val){
-		return ExpectationSet::runExpectation($val, false);
+		return ExpectationSet::runExpectation($val, true);
 	}
 
 	function expect($val){
@@ -24,6 +24,7 @@ class ExpectationSet {
 	public static function Run($scene, $title, $func, $ignore=false){
 		$es = new ExpectationSet($title, $scene);
 		static::$sets[] = $es;
+		$es->pending = $ignore;
 		foreach($es->before as $id => $b){
 			set_error_handler($es->generateErrorHandler('before', $id));
 			$bfunc = $b->func;
@@ -39,17 +40,23 @@ class ExpectationSet {
 			$afunc($es->scene);
 			restore_error_handler();
 		}
+
 		return $es;
 	}
 
+	public function xthe($title, $func){
+		return $this->the($title, $func, true);
+	}
 	public function the($title, $func, $dontdoit=false){
 		return $this->scene->the($title, $func, $dontdoit);
 	}
 
-	public static function runExpectation($exp, $doRun=true){
-		$pending = !$doRun;
-		$exp = new Expectation($exp, $pending);
+	public static function runExpectation($exp, $pending=false){
 		$set = end(static::$sets);
+		if($set->pending){
+			$pending = true;
+		}
+		$exp = new Expectation($exp, $pending);
 		$set->expectations[] = $exp;
 
 		return $exp;
