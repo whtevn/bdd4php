@@ -3,15 +3,8 @@
 		private static $colors;
 		private static $counters=array();
 		public static function Summarize($scene){
-			static::watchSizeOf('beforeSetSize');
-			static::watchSizeOf('beforeErrorSetSize');
-			static::watchSizeOf('afterSetSize');
-			static::watchSizeOf('afterErrorSetSize');
-			
 			echo("\n".$scene->title);
 			foreach($scene->expectationSet as $es){
-
-				static::watchSizeOf('beforeSetSize', $es->errorSet['before']);
 				if(static::sizeIncreased('beforeSetSize', $es->errorSet['before'])){
 					echo("\n\t### new before");
 				}
@@ -23,14 +16,9 @@
 		}
 
 		private static function sizeIncreased($name, $thing){
-			if($result = static::$counters[$name] < sizeof($thing)){
-				static::$counters[$name] = sizeof($thing);
-			}
-			return $result;
-		}
-
-		private static function watchSizeOf($name){
-			static::$counters[$name] || static::$counters[$name]=0;
+			$oldSize = static::$counters[$name] || 0; 
+			static::$counters[$name] = sizeof($thing);
+			return sizeof($thing) > $oldSize;
 		}
 
 		public static function summary($title, $report, $expectations){
