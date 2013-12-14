@@ -1,13 +1,13 @@
 <?php
-	include 'expectation.php';	
+include 'expectation.php';	
 
-	function xexpect($val){
-		return ExpectationSet::runExpectation($val, true);
-	}
+function xexpect($val){
+	return ExpectationSet::runExpectation($val, true);
+}
 
-	function expect($val){
-		return ExpectationSet::runExpectation($val);
-	}
+function expect($val){
+	return ExpectationSet::runExpectation($val);
+}
 
 class ExpectationSet {
 	private static $sets = array();
@@ -47,8 +47,8 @@ class ExpectationSet {
 	public function xthe($title, $func){
 		return $this->the($title, $func, true);
 	}
-	public function the($title, $func, $dontdoit=false){
-		return $this->scene->the($title, $func, $dontdoit);
+	public function the($title, $func, $pending=false){
+		return $this->scene->the($title, $func, $pending);
 	}
 
 	public static function runExpectation($exp, $pending=false){
@@ -60,12 +60,6 @@ class ExpectationSet {
 		$set->expectations[] = $exp;
 
 		return $exp;
-	}
-
-	public function setError($error, $time, $id){
-		if(!IsSet($this->errorSet[$time])){
-			$this->errorSet[$time] = array();
-		}
 	}
 
 	public function generateErrorHandler($time, $id=0){
@@ -80,12 +74,6 @@ class ExpectationSet {
 		};
 	}
 
-	public function expect($exp){
-		$exp = new Expectation($exp);
-		$this->expectations[] = $exp;
-
-		return $exp;
-	}
 }
 
 ?>
