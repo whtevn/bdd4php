@@ -2,6 +2,7 @@
 	include 'fixture.php';	
 	include 'colors.php';
 	include 'expectation.php';	
+	include 'expectationSet.php';	
 	include 'reporter.php';	
 
 	function xexpect($val){
@@ -21,6 +22,7 @@
 			$scene = new Scenario(); 
 			$scene->doBeforeEach = array();
 			$scene->doAfterEach = array();
+			$scene->expectationSet = array();
 			$func($scene);
 
 			$report = Scenario::reportOn(static::$expectations);
@@ -73,19 +75,25 @@
 		}
 
 		public function the($title, $func, $dontdoit=false){
-			//set_error_handler('');
 			if($dontdoit){
 				static::$rejected = true;
 			}
-			foreach($this->doBeforeEach as $bfunc){
+
+
+			
+			$this->expectationSet[] = $es =new ExpectationSet($title);
+
+			foreach($this->doBeforeEach as $id => $bfunc){
+				set_error_handler($es->generateErrorHandler('before', $id));
 				$bfunc($this);
 			}
+			set_error_handler($es->generateErrorHandler('during', $es->id));
 			$func($this);
 			foreach($this->doAfterEach as $bfunc){
+				set_error_handler($es->generateErrorHandler('after', $id));
 				$bfunc($this);
 			}
 			static::$rejected = false;
-			//restore_error_handler();
 			return $this;
 		}
 
