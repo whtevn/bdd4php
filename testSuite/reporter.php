@@ -5,7 +5,7 @@
 		public static function Summarize($scene){
 			$record  = array();
 			$colors =  new Colors();
-			echo($colors->getColoredString("\n".$scene->title, 'cyan'));
+			echo($colors->getColoredString($scene->title, 'cyan'));
 			foreach($scene->expectationSet as $es){
 				if(static::sizeIncreased('beforeSetSize', $es->before)){
 					echo($colors->getColoredString("\n\t".end($es->before)->title, 'cyan'));
@@ -41,6 +41,7 @@
 			foreach($record as $r){
 				echo($r->success ? $colors->getColoredString('.', 'green') : $colors->getColoredString('F', 'red'));
 			}
+			echo("\n");
 		}
 
 		private static function sizeIncreased($name, $thing){
@@ -55,12 +56,8 @@
 		public static function printBacktrace($bts){
 			$result = '';
 			foreach($bts as $bt){
-				if(!preg_match('/\/testSuite/', $bt['file'])){
-					switch($bt['class']){
-						case 'Expectation':
-							$result .= "on line ".$bt['line']." of ".$bt['file'];
-							break;
-					}
+				if(!preg_match('/\/testSuite/', $bt['file']) && $bt['class']=='Expectation'){
+					$result .= "on line ".$bt['line']." of ".$bt['file'];
 				}
 			}
 			return $result;

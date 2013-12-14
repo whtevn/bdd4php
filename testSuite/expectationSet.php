@@ -28,13 +28,16 @@ class ExpectationSet {
 			set_error_handler($es->generateErrorHandler('before', $id));
 			$bfunc = $b->func;
 			$bfunc($es->scene);
+			restore_error_handler();
 		}
 		set_error_handler($es->generateErrorHandler('during', $es->id));
 		$func($es->scene);
+		restore_error_handler();
 		foreach($es->after as $id=>$a){
 			set_error_handler($es->generateErrorHandler('after', $id));
 			$afunc = $a->func;
 			$afunc($es->scene);
+			restore_error_handler();
 		}
 		return $es;
 	}
