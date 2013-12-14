@@ -14,8 +14,14 @@
 				"did not expect object to be of type $val, but it was");
 		}
 
-		public function toBe($val){
+		public function toEqual($val){
 			$this->judge($val == $this->testValue,
+				"expected ".print_r($val, true)." but got ".print_r($this->testValue, true),
+				"did not expect ".print_r($val, true).", but got it");
+		}
+
+		public function toBe($val){
+			$this->judge($val === $this->testValue,
 				"expected ".print_r($val, true)." but got ".print_r($this->testValue, true),
 				"did not expect ".print_r($val, true).", but got it");
 		}
