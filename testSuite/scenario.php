@@ -4,7 +4,6 @@
 	include 'expectationSet.php';	
 	include 'reporter.php';	
 
-
 	final class Scenario {
 		public static function when($title, $func) {
 			$scene = new Scenario(); 
