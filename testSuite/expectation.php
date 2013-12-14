@@ -1,10 +1,11 @@
 <?php
 	class Expectation {
 		private static $colors;
-		public function __construct($val){
+		public function __construct($val, $pending=false){
 			static::$colors = new Colors();
 			$this->testValue = $val;
 			$this->asIntended = true;
+			$this->pending = $pending;
 		}
 
 		public function toBeTypeOf($val){
@@ -13,10 +14,23 @@
 				"did not expect object to be of type $val, but it was");
 		}
 
-		public function toBe($val){
+		public function toEqual($val){
 			$this->judge($val == $this->testValue,
 				"expected ".print_r($val, true)." but got ".print_r($this->testValue, true),
 				"did not expect ".print_r($val, true).", but got it");
+		}
+
+		public function toBe($val){
+			$this->judge($val === $this->testValue,
+				"expected ".print_r($val, true)." but got ".print_r($this->testValue, true),
+				"did not expect ".print_r($val, true).", but got it");
+		}
+
+		public function toBeTimestamp($val){
+			$val = strtotime($val);
+			$this->judge($val == $this->testValue,
+				"expected ".strftime("%m/%d/%Y %l:%M:%S %p", $val)." but got ".strftime("%m/%d/%Y %l:%M:%S %p", $this->testValue),
+				"did not expect ".strftime("%m/%d/%Y %l:%M:%S %p", $val).", but got it");
 		}
 
 		public function toHaveProperty($value){
@@ -39,19 +53,13 @@
 				$msg  = $unmsg;
 				$eval = !$eval;
 			}
-			$eval ? static::success() : static::failure($msg);
-			$this->asIntended = true;
-		}
-
-		private function success(){
-			$this->success = true;
-			print(static::$colors->getColoredString('.', 'green'));
-		}
-
-		private function failure($msg){
-			$this->success = false;
-			print static::$colors->getColoredString("\n$msg\n", 'red');
-			debug_print_backtrace();
+			
+			$this->success = $eval;
+			if($this->success){
+				$msg = "success";
+			}
+			$this->msg=$msg;
+			$this->backtrace=debug_backtrace();
 		}
 	}
 ?>
