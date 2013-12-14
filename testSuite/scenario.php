@@ -30,10 +30,8 @@
 			return $this->the($title, $func, true);
 		}
 
-		public function the($title, $func, $dontdoit=false){
-			return $this->expectationSet[] = ExpectationSet::Run($this, $title, $func, $dontdoit);
+		public function the($title, $func, $pending=false){
+			return $this->expectationSet[] = ExpectationSet::Run($this, $title, $func, $pending);
 		}
-
-
 	}
 ?>
