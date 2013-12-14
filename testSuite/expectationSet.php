@@ -62,7 +62,7 @@ class ExpectationSet {
 		return $exp;
 	}
 
-	public function generateErrorHandler($time, $id=0){
+	private function generateErrorHandler($time, $id=0){
 		$es = $this;
 		return function($errno, $errstr, $errfile, $errline) use ($es, $time, $id) {
 			$es->errorSet[$time][$id] =
