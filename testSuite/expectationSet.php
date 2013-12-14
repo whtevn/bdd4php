@@ -25,7 +25,7 @@ class ExpectationSet {
 	}
 
 	public function the($title, $func, $dontdoit=false){
-		/*foreach($this->before as $id => $bfunc){
+		foreach($this->before as $id => $bfunc){
 			set_error_handler($this->generateErrorHandler('before', $id));
 			$bfunc($scene);
 		}
@@ -34,7 +34,7 @@ class ExpectationSet {
 		foreach($this->after as $bfunc){
 			set_error_handler($this->generateErrorHandler('after', $id));
 			$bfunc($scene);
-		}*/
+		}
 		return $this;
 	}
 
