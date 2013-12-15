@@ -6,8 +6,8 @@
 	//	2. include those files, then run all
 	//	3. make a config file with default regex or file set
 
-	Fixture::at('fixtures');
-	include 'sampleSpec.php';
+	Fixture::at('contrivedExample/fixtures');
+	include 'contrivedExample/sampleSpec.php';
 
 	Scenario::RunAll();
 ?>
