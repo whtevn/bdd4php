@@ -1,4 +1,5 @@
 <?php
+	Fixture::at('contrivedExample/fixtures');
 	Scenario::when("testing some basic things", function($then){
 		$then->beforeEach("set up the users", function($scene){
 			$userFixture  = Fixture::get('users');
