@@ -17,7 +17,11 @@
 			include_once static::$specDir."/".$loc;
 		}
 		public static function CheckSpec(){
-			Scenario::RunAll();
+			Scenario::each(function($scene){
+				$sceneFunc = $scene->runner->func;
+				$sceneFunc($scene);
+				return Reporter::Summarize($scene);
+			});
 		}
 
 		private static function filenameList($files){

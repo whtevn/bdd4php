@@ -35,12 +35,12 @@
 			return $this->expectationSet[] = ExpectationSet::Run($this, $title, $func, $pending);
 		}
 
-		public static function RunAll(){
+		public static function each($func){
+			$array = array();
 			foreach(static::$scenarios as $scene){
-				$sceneFunc = $scene->runner->func;
-				$sceneFunc($scene);
-				Reporter::Summarize($scene);
+				$array[] = $func($scene);
 			}
+			return $array;
 		}
 	}
 ?>

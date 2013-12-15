@@ -4,7 +4,6 @@
 		private static $counters=array();
 		public static function Summarize($scene){
 			$record  = array();
-			$colors =  new Colors();
 			echo(Colors::str($scene->title, 'cyan'));
 			foreach($scene->expectationSet as $es){
 				if(static::sizeIncreased('beforeSetSize', $es->before)){
@@ -61,6 +60,7 @@
 				echo(Colors::str("\n$pending expectations skipped", 'yellow'));
 			}
 			echo("$result\n\n");
+			return $record;
 		}
 
 		private static function sizeIncreased($name, $thing){
