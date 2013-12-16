@@ -2,9 +2,10 @@
 	include 'testSuite/scenario.php';
 
 
+
 	Fixture::at('fixtures');
 	Scenario::when("testing some basic things", function($then){
-		$then->beforeEach(function($scene){
+		$then->beforeEach("set up the users", function($scene){
 			$userFixture  = Fixture::get('users');
 			$scene->frank = $userFixture->user_1;
 			$scene->hulk  = $userFixture->user_2;
@@ -22,6 +23,13 @@
 			expect($users->hulk->last_name)->not()->toBe("hogan");
 			expect($users->hulk->last_name)->toBe("zappa");
 		});
+		$then->beforeEach("update frank's last name", function($scene){
+			$scene->frank->last_name = 'sinatra';
+		})->
+		the("last name should be the new thing", function($users){
+			expect($users->frank->last_name)->toBe("sinatra");
+		});
 	});
+
 
 ?>

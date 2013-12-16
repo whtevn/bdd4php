@@ -1,5 +1,7 @@
 # bdd4php
 
+simple bdd proof of concept for php
+
 ## Basic Syntax
 
 Looks like this. Look at sampleSpec.php file included in the project for
