@@ -5,5 +5,6 @@
 	Runner::SuiteDir($testSuite);
 	Runner::SpecDir(__DIR__);
 	Runner::WatchFile('sampleSpec.php');
+	Runner::WatchFile('sampleSpec2.php');
 	Runner::CheckSpec();
 ?>

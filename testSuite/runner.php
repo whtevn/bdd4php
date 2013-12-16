@@ -17,11 +17,31 @@
 			include_once static::$specDir."/".$loc;
 		}
 		public static function CheckSpec(){
-			Scenario::each(function($scene){
+			$reporter = new Reporter();
+			$reports = Scenario::each($reporter, function($scene, $reporter){
 				$sceneFunc = $scene->runner->func;
 				$sceneFunc($scene);
-				return Reporter::Summarize($scene);
+				return $reporter->summarize($scene);
 			});
+
+
+			$result = Colors::str("\n\nTL;DR: ", 'cyan');
+			$pending = $successes = $failures = 0;
+			$summary = '';
+			foreach($reports as $report){
+				$tldr = $reporter->tldr($report); 
+				$pending += $tldr['pending'];
+				$successes += $tldr['successes'];
+				$failures += $tldr['failures'];
+				$summary .= $tldr['record'];
+			}
+			$sumColor = $failures>0 ? 'red' : 'green';
+			$result .= ($successes+$failures)." expectations ran"; 
+			$result .= Colors::str("\n$successes succeeded and $failures failed", $sumColor);
+			if($pending > 0){
+				$result .= Colors::str("\n$pending expectations skipped", 'yellow');
+			}
+			echo($result."\n$summary");
 		}
 
 		private static function filenameList($files){

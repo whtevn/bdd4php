@@ -35,10 +35,10 @@
 			return $this->expectationSet[] = ExpectationSet::Run($this, $title, $func, $pending);
 		}
 
-		public static function each($func){
+		public static function each($reporter, $func){
 			$array = array();
 			foreach(static::$scenarios as $scene){
-				$array[] = $func($scene);
+				$array[] = $func($scene, $reporter);
 			}
 			return $array;
 		}

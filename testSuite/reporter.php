@@ -1,15 +1,14 @@
 <?php
 	class Reporter {
-		private static $colors;
-		private static $counters=array();
-		public static function Summarize($scene){
+		private $counters=array();
+		public function summarize($scene){
 			$record  = array();
-			echo(Colors::str($scene->title, 'cyan'));
+			echo(Colors::str("\n".$scene->title, 'cyan'));
 			foreach($scene->expectationSet as $es){
-				if(static::sizeIncreased('beforeSetSize', $es->before)){
+				if($this->sizeIncreased('beforeSetSize', $es->before)){
 					echo(Colors::str("\n\t".end($es->before)->title, 'cyan'));
 				}
-				if(!$es->pending && IsSet($es->errorSet['before']) && static::sizeIncreased('beforeErrorSetSize', $es->errorSet['before'])){
+				if(!$es->pending && IsSet($es->errorSet['before']) && $this->sizeIncreased('beforeErrorSetSize', $es->errorSet['before'])){
 					$err = end($es->errorSet['before']);
 					echo(Colors::str("\n\t".$err['errorString']." during beforeEach\n\ton line ".$err['errorLine']." of ".$err['errorFile'], 'yellow'));
 				}
@@ -19,7 +18,7 @@
 					$record[] = $e;
 
 					if(!$e->success && !$e->pending){
-						$errors[] = $e->msg." \n\t\t\t\t(expectation ".static::printBacktrace($e->backtrace).")";
+						$errors[] = $e->msg." \n\t\t\t\t(expectation ".$this->printBacktrace($e->backtrace).")";
 					}
 					if($success){
 						$success = $e->success;
@@ -39,8 +38,12 @@
 				}
 			}
 
+			return $record;
+		}
+
+		public static function tldr($record){
 			$pending = $successes = $failures = 0;
-			$result = "\n\n";
+			$result = "";
 			foreach($record as $r){
 				if($r->success && !$r->pending){
 					$result .= Colors::str('.', 'green');
@@ -53,22 +56,19 @@
 				}
 			}
 			$sumColor = $failures>0 ? 'red' : 'green';
-			echo(Colors::str("\n\nTL;DR: ", 'cyan'));
-			echo(sizeof($record)-$pending." exceptions ran");
-			echo(Colors::str("\n$successes succeeded and $failures failed", $sumColor));
-			if($pending > 0){
-				echo(Colors::str("\n$pending expectations skipped", 'yellow'));
-			}
-			echo("$result\n\n");
-			return $record;
+			return array(
+				'successes'=>$successes,
+				'failures'=>$failures,
+				'pending'=>$pending,
+				'record'=>$result);
 		}
 
-		private static function sizeIncreased($name, $thing){
+		private function sizeIncreased($name, $thing){
 			$oldSize = 0; 
-			if(IsSet(static::$counters[$name])){
-				$oldSize = static::$counters[$name]; 
+			if(IsSet($this->counters[$name])){
+				$oldSize = $this->counters[$name]; 
 			}
-			static::$counters[$name] = sizeof($thing);
+			$this->counters[$name] = sizeof($thing);
 			return sizeof($thing) > $oldSize;
 		}
 
