@@ -20,6 +20,12 @@
 				"did not expect ".print_r($val, true).", but got it");
 		}
 
+		public function sizeToBe($val){
+			$this->judge($val === sizeof($this->testValue),
+				"expected object to have ".$val." items, but had ".sizeof($this->testValue),
+				"did not expect ".$val." items in the object, but got it");
+		}
+
 		public function toBe($val){
 			$this->judge($val === $this->testValue,
 				"expected ".print_r($val, true)." but got ".print_r($this->testValue, true),

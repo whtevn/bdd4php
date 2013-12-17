@@ -41,7 +41,7 @@
 			if($pending > 0){
 				$result .= Colors::str("\n$pending expectations skipped", 'yellow');
 			}
-			echo($result."\n$summary");
+			echo($result."\n$summary\n\n");
 		}
 
 		private static function filenameList($files){
