@@ -1,0 +1,9 @@
+{
+"name": "whtevn/bdd4php",
+"description": "behavioral development for php",
+"version": "0.4.0",
+"type": "library",
+"keywords": ["testing", "bdd"],
+"homepage": "https://github.com/whtevn/bdd4php",
+"license": "MIT"
+}
