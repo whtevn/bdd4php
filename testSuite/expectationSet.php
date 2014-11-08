@@ -1,4 +1,4 @@
-<?php
+<?php namespace BDD;
 include 'expectation.php';	
 
 function xexpect($val){

@@ -1,7 +1,6 @@
-<?php
+<?php namespace BDD;
+
 	include 'testSuite/scenario.php';
-
-
 
 	Fixture::at('fixtures');
 	Scenario::when("testing some basic things", function($then){

@@ -1,4 +1,4 @@
-<?php
+<?php namespace BDD;
 	class Reporter {
 		private static $colors;
 		private static $counters=array();

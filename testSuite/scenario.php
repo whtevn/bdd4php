@@ -1,10 +1,11 @@
-<?php
+<?php namespace BDD;
 	include 'fixture.php';	
 	include 'colors.php';
 	include 'expectationSet.php';	
 	include 'reporter.php';	
 	include 'namedBlock.php';	
 
+	Fixture:: base(dirname(__FILE__));
 	final class Scenario {
 		public static function when($title, $func) {
 			$scene = new Scenario(); 
