@@ -1,7 +1,7 @@
 {
 	"name": "whtevn/bdd4php",
 	"description": "behavioral development for php",
-	"version": "0.5.3",
+	"version": "0.5.4",
 	"type": "library",
 	"keywords": ["testing", "bdd"],
 	"homepage": "https://github.com/whtevn/bdd4php",
