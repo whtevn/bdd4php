@@ -1,14 +1,14 @@
 {
 	"name": "whtevn/bdd4php",
 	"description": "behavioral development for php",
-	"version": "0.5.6",
+	"version": "0.5.8",
 	"type": "library",
 	"keywords": ["testing", "bdd"],
 	"homepage": "https://github.com/whtevn/bdd4php",
 	"license": "MIT",
 	"autoload": {
 		"psr-4": {
-			"whtevn\\BDD\\": "."
+			"whtevn\\BDD\\": "./testSuite"
 		}
 	}
 }
