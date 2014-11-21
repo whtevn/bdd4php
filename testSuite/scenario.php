@@ -1,4 +1,4 @@
-<?php namespace BDD;
+<?php
 	include 'fixture.php';	
 	include 'colors.php';
 	include 'expectationSet.php';	
