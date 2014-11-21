@@ -1,4 +1,4 @@
-<?php namespace BDD;
+<?php
 	class NamedBlock {
 		public function __construct($title, $func=null){
 			if(!$func){

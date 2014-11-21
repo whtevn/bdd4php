@@ -1,4 +1,4 @@
-<?php namespace BDD;
+<?php
 	class Fixture {
 		private static $loc;
 		public static function get($name, $asArray=false){

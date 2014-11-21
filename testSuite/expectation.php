@@ -1,4 +1,4 @@
-<?php namespace BDD;
+<?php
 	class Expectation {
 		private static $colors;
 		public function __construct($val, $pending=false){

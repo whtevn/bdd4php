@@ -1,4 +1,4 @@
-<?php namespace BDD;
+<?php
 
 	include 'testSuite/scenario.php';
 
